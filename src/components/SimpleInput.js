@@ -7,6 +7,18 @@ const SimpleInput = (props) => {
 
   const userInputHandler = (e) => {
     setUsername(e.target.value);
+
+    if (username.trim() !== "") {
+      setUsernameIsValid(true);
+    }
+  };
+
+  const userInputBlurHandler = () => {
+    setUsernameIsEntered(true);
+
+    if (username.trim() === "") {
+      setUsernameIsValid(false);
+    }
   };
 
   const submitHandler = (e) => {
@@ -37,6 +49,7 @@ const SimpleInput = (props) => {
           id="name"
           value={username}
           onChange={userInputHandler}
+          onBlur={userInputBlurHandler}
         />
         {usernameIsInvalid && (
           <p className="error-text">Name must not be empty!!</p>
