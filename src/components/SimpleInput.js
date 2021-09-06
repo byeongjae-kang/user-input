@@ -47,7 +47,7 @@ const SimpleInput = (props) => {
         )}
       </div>
       <div className="form-actions">
-        <button>Submit</button>
+        <button disabled={usernameIsInvalid}>Submit</button>
       </div>
     </form>
   );
