@@ -2,40 +2,31 @@ import { useState } from "react";
 
 const SimpleInput = (props) => {
   const [username, setUsername] = useState("");
-  const [usernameIsValid, setUsernameIsValid] = useState(false);
   const [usernameIsEntered, setUsernameIsEntered] = useState(false);
+
+  const usernameIsValid = username.trim() !== "";
+  const usernameIsInvalid = !usernameIsValid && usernameIsEntered;
 
   const userInputHandler = (e) => {
     setUsername(e.target.value);
-
-    if (username.trim() !== "") {
-      setUsernameIsValid(true);
-    }
   };
 
   const userInputBlurHandler = () => {
     setUsernameIsEntered(true);
-
-    if (username.trim() === "") {
-      setUsernameIsValid(false);
-    }
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-
     setUsernameIsEntered(true);
 
-    if (username.trim() === "") {
-      setUsernameIsValid(false);
+    if (!usernameIsValid) {
       return;
     }
 
-    setUsernameIsValid(true);
     setUsername("");
+    setUsernameIsEntered(false);
   };
 
-  const usernameIsInvalid = !usernameIsValid && usernameIsEntered;
   const nameInputClasses = usernameIsInvalid
     ? "form-control invalid"
     : "form-control";
