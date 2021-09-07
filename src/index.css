@@ -85,6 +85,7 @@ button:disabled:active {
   background-color: #ccc;
   border-color: #ccc;
   color: rgb(78, 78, 78);
+  cursor: not-allowed;
 }
 
 .form-actions {
