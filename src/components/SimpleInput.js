@@ -1,4 +1,3 @@
-import { useState } from "react";
 import useInput from "../hooks/use-input";
 
 const SimpleInput = (props) => {
@@ -11,11 +10,14 @@ const SimpleInput = (props) => {
     inputBlurHandler: usernameBlurHandler
   } = useInput((value) => value.trim() !== "");
 
-  const [email, setEmail] = useState("");
-  const [emailIsEntered, setEmailIsEntered] = useState(false);
-
-  const emailIsValid = email.includes("@");
-  const emailIsInvalid = !emailIsValid && emailIsEntered;
+  const {
+    value: email,
+    valueIsValid: emailIsValid,
+    hasError: emailHasError,
+    reset: resetEmail,
+    valueChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler
+  } = useInput((value) => value.includes("@"));
 
   let formIsValid = false;
 
@@ -23,31 +25,20 @@ const SimpleInput = (props) => {
     formIsValid = true;
   }
 
-  const emailInputHandler = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const emailInputBlurHandler = () => {
-    setEmailIsEntered(true);
-  };
-
   const submitHandler = (e) => {
     e.preventDefault();
-
-    if (usernameHasError || emailIsInvalid) {
+    if (usernameHasError || emailHasError) {
       return;
     }
-
     resetUsername();
-    setEmail("");
-    setEmailIsEntered(false);
+    resetEmail();
   };
 
   const nameInputClasses = usernameHasError
     ? "form-control invalid"
     : "form-control";
 
-  const emailInputClasses = emailIsInvalid
+  const emailInputClasses = emailHasError
     ? "form-control invalid"
     : "form-control";
 
@@ -72,10 +63,10 @@ const SimpleInput = (props) => {
           type="email"
           id="email"
           value={email}
-          onChange={emailInputHandler}
-          onBlur={emailInputBlurHandler}
+          onChange={emailChangeHandler}
+          onBlur={emailBlurHandler}
         />
-        {emailIsInvalid && (
+        {emailHasError && (
           <p className="error-text">Please enter a valid email</p>
         )}
       </div>
