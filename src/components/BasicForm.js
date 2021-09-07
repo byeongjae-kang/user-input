@@ -37,7 +37,7 @@ const BasicForm = (props) => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    if (firstNameHasError || lastNameHasError) {
+    if (!formIsValid) {
       return;
     }
 
