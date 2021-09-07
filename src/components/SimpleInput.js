@@ -1,13 +1,19 @@
 import { useState } from "react";
+import useInput from "../hooks/use-input";
 
 const SimpleInput = (props) => {
-  const [username, setUsername] = useState("");
-  const [usernameIsEntered, setUsernameIsEntered] = useState(false);
+  const {
+    value: username,
+    valueIsValid: usernameIsValid,
+    hasError: usernameHasError,
+    reset: resetUsername,
+    valueChangeHandler: usernameChangeHandler,
+    inputBlurHandler: usernameBlurHandler
+  } = useInput((value) => value.trim() !== "");
+
   const [email, setEmail] = useState("");
   const [emailIsEntered, setEmailIsEntered] = useState(false);
 
-  const usernameIsValid = username.trim() !== "";
-  const usernameIsInvalid = !usernameIsValid && usernameIsEntered;
   const emailIsValid = email.includes("@");
   const emailIsInvalid = !emailIsValid && emailIsEntered;
 
@@ -16,14 +22,6 @@ const SimpleInput = (props) => {
   if (usernameIsValid && emailIsValid) {
     formIsValid = true;
   }
-
-  const usernameInputHandler = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const usernameInputBlurHandler = () => {
-    setUsernameIsEntered(true);
-  };
 
   const emailInputHandler = (e) => {
     setEmail(e.target.value);
@@ -35,20 +33,17 @@ const SimpleInput = (props) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    setUsernameIsEntered(true);
-    setEmailIsEntered(true);
 
-    if (usernameIsInvalid || emailIsInvalid) {
+    if (usernameHasError || emailIsInvalid) {
       return;
     }
 
-    setUsername("");
+    resetUsername();
     setEmail("");
-    setUsernameIsEntered(false);
     setEmailIsEntered(false);
   };
 
-  const nameInputClasses = usernameIsInvalid
+  const nameInputClasses = usernameHasError
     ? "form-control invalid"
     : "form-control";
 
@@ -64,10 +59,10 @@ const SimpleInput = (props) => {
           type="text"
           id="name"
           value={username}
-          onChange={usernameInputHandler}
-          onBlur={usernameInputBlurHandler}
+          onChange={usernameChangeHandler}
+          onBlur={usernameBlurHandler}
         />
-        {usernameIsInvalid && (
+        {usernameHasError && (
           <p className="error-text">Name must not be empty!!</p>
         )}
       </div>
